@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 关系工单（Relationship Ticket）
 
-## Getting Started
+面向情侣二人的轻量级**沟通事项**工具：把情绪与误会拆成「可发起、可回复、可跟进、可关闭」的小工单，尽量避免当场对抗，方便事后复盘。
 
-First, run the development server:
+> 本产品刻意避免「投诉」「惩罚」一类的对抗叙事，话术以**共同解决问题**为主。
+
+---
+
+## 当前能力
+
+- 邮箱密码登录（Supabase Auth，账号由管理员在后台创建）
+- 按情侣关系（`couples`）隔离数据
+- 待解决事项列表、已完成列表
+- 发起事项（标题、内容、重要程度、希望解决时间、是否需当面沟通等）
+- 事项详情下的回复与发起人关闭事项
+- 响应式界面（移动端顶部导航 / 桌面端侧栏）
+
+技术栈：**Next.js**、**TypeScript**、**Tailwind CSS**、**Supabase**（PostgreSQL + Auth）
+
+---
+
+## 本地开发
+
+```bash
+npm install
+```
+
+复制环境变量模板并填写 Supabase 项目中的 URL 与密钥：
+
+```bash
+copy .env.example .env.local
+```
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+浏览器打开 [http://localhost:3000](http://localhost:3000)。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 环境变量
 
-## Learn More
+见仓库根目录 [`.env.example`](./.env.example)。**切勿**把真实 `.env.local` 提交到 Git。
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 持续开发与路线图
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+本会**持续迭代**，当前版本偏重「跑通闭环 + 日常使用」。后续计划包括但不限于：
 
-## Deploy on Vercel
+| 方向 | 说明 |
+|------|------|
+| **AI 分析与建议（规划中）** | 在充分尊重隐私与用户授权的前提下，对沟通文本做温和的总结、复盘提示（非评判对错），可选关闭 |
+| **体验优化** | 通知、离线提示、更丰富空状态引导等 |
+| **数据与安全** | 更精细的权限、导出与备份选项等 |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+具体排期与实现以仓库更新为准；欢迎通过 Issue 提出建议。
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 授权
+
+如无特殊说明，以仓库内许可证文件为准（未添加前默认为私有/保留权利，请以实际仓库设置为准）。
+
+---
+
+## 致谢
+
+感谢你们愿意一起用「工单」这种方式，把难过的时刻变成可被温柔处理的事情。
