@@ -4,27 +4,23 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
   formatDateTime,
-  getUserLabel,
   severityLabel,
   severityTone,
-  statusLabel,
 } from "@/lib/local-store";
-import { listOpenTickets } from "@/lib/supabase-store";
-import type { Couple, Ticket } from "@/types/ticket";
+import { listCompletedTickets } from "@/lib/supabase-store";
+import type { Ticket } from "@/types/ticket";
 
-export default function Home() {
+export default function CompletedPage() {
   const [tickets, setTickets] = useState<Ticket[]>([]);
-  const [couple, setCouple] = useState<Couple | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     let mounted = true;
     const load = async () => {
       try {
-        const result = await listOpenTickets();
+        const result = await listCompletedTickets();
         if (!mounted) return;
         setTickets(result.tickets);
-        setCouple(result.couple);
       } finally {
         if (mounted) setIsLoading(false);
       }
@@ -37,17 +33,9 @@ export default function Home() {
 
   return (
     <section className="space-y-5">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-xl font-semibold text-indigo-950">待解决事项</h1>
-          <p className="text-sm text-slate-500">把情绪问题变成可跟进、可关闭的沟通流程。</p>
-        </div>
-        <Link
-          href="/tickets/new"
-          className="hidden shrink-0 items-center rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 px-4 py-2 text-sm font-medium text-white shadow-md shadow-indigo-300 transition hover:-translate-y-0.5 hover:shadow-lg md:inline-flex"
-        >
-          发起沟通事项
-        </Link>
+      <div>
+        <h1 className="text-xl font-semibold text-indigo-950">已完成事项</h1>
+        <p className="text-sm text-slate-500">保留解决记录，帮助你们后续复盘。</p>
       </div>
 
       {isLoading ? (
@@ -56,14 +44,7 @@ export default function Home() {
         </div>
       ) : tickets.length === 0 ? (
         <div className="soft-card rounded-3xl border border-dashed p-10 text-center text-sm text-slate-500">
-          <div className="mb-2 text-4xl">😊</div>
-          <p className="mb-4">当前没有待解决事项，状态很好。</p>
-          <Link
-            href="/tickets/new"
-            className="inline-flex rounded-full border border-indigo-200 bg-white px-4 py-2 text-xs text-indigo-700 hover:bg-indigo-50"
-          >
-            有新的想法？创建一个事项
-          </Link>
+          还没有已完成事项。
         </div>
       ) : (
         <ul className="space-y-3">
@@ -89,9 +70,8 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-3 text-xs text-slate-500">
-                  <span>状态：{statusLabel[ticket.status]}</span>
-                  <span>发起人：{getUserLabel(ticket.creatorId, couple)}</span>
-                  <span>最后更新：{formatDateTime(ticket.updatedAt)}</span>
+                  <span>创建：{formatDateTime(ticket.createdAt)}</span>
+                  <span>关闭：{formatDateTime(ticket.closedAt)}</span>
                 </div>
               </Link>
             </li>
