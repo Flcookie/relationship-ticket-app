@@ -1,3 +1,4 @@
+import type { AppreciationCategory } from "@/types/appreciation";
 import type { Couple, Severity, UserId } from "@/types/ticket";
 
 export const severityLabel: Record<Severity, string> = {
@@ -23,6 +24,23 @@ export const resolutionLabel = {
   this_week: "本周",
   not_urgent: "不急",
 } as const;
+
+export const appreciationCategoryLabel: Record<AppreciationCategory, string> =
+  {
+    care: "体贴",
+    support: "支持",
+    romance: "浪漫",
+    growth: "一起成长",
+    daily: "日常",
+  };
+
+export const appreciationCategoryTone: Record<AppreciationCategory, string> = {
+  care: "bg-rose-50 text-rose-800 ring-1 ring-rose-200",
+  support: "bg-sky-50 text-sky-800 ring-1 ring-sky-200",
+  romance: "bg-fuchsia-50 text-fuchsia-800 ring-1 ring-fuchsia-200",
+  growth: "bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200",
+  daily: "bg-amber-50 text-amber-800 ring-1 ring-amber-200",
+};
 
 export function getUserLabel(userId: UserId, couple?: Couple | null) {
   if (!couple) {

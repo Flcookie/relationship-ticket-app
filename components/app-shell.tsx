@@ -13,13 +13,14 @@ const navItems = [
   { href: "/", label: "待解决" },
   { href: "/tickets/new", label: "新建事项" },
   { href: "/completed", label: "已完成" },
+  { href: "/appreciations", label: "暖心瞬间" },
 ];
 
 function isCurrent(pathname: string, href: string) {
   if (href === "/") {
     return pathname === "/";
   }
-  return pathname.startsWith(href);
+  return pathname === href || pathname.startsWith(`${href}/`);
 }
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -147,14 +148,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 关系工单
               </Link>
             </div>
-            <nav className="grid grid-cols-3 gap-2">
+            <nav className="-mx-0.5 flex gap-1.5 overflow-x-auto pb-0.5 scrollbar-thin">
               {navItems.map((item) => {
                 const active = isCurrent(pathname, item.href);
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`rounded-xl px-2 py-2 text-center text-xs transition ${
+                    className={`shrink-0 rounded-xl px-3 py-2 text-center text-xs whitespace-nowrap transition ${
                       active
                         ? "bg-gradient-to-r from-indigo-500 to-violet-500 text-white shadow-md shadow-indigo-300/40"
                         : "bg-white/60 text-slate-600"

@@ -13,7 +13,10 @@
 - 待解决事项列表、已完成列表
 - 发起事项（标题、内容、重要程度、希望解决时间、是否需当面沟通等）
 - 事项详情下的回复与发起人关闭事项
-- 响应式界面（移动端顶部导航 / 桌面端侧栏）
+- **暖心瞬间**（`appreciations`）：记录写给对方的正向瞬间，支持分类筛选（体贴 / 支持 / 浪漫 / 一起成长 / 日常）
+- 响应式界面（移动端顶部横向导航 / 桌面端侧栏）
+
+若使用 `appreciations` 表，请在 Supabase 中配置 RLS 策略（可参考仓库内 [`supabase/sql/appreciations-rls-policies.sql`](./supabase/sql/appreciations-rls-policies.sql)）。
 
 技术栈：**Next.js**、**TypeScript**、**Tailwind CSS**、**Supabase**（PostgreSQL + Auth）
 

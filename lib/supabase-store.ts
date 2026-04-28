@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabase";
+import type { Appreciation, AppreciationCategory } from "@/types/appreciation";
 import type { Comment, Couple, Severity, Ticket, TicketStatus } from "@/types/ticket";
 
 type TicketRow = {
@@ -206,5 +207,85 @@ export async function closeTicket(ticketId: string) {
 
 export async function signOut() {
   const { error } = await supabase.auth.signOut();
+  if (error) throw error;
+}
+
+type AppreciationRow = {
+  id: string;
+  couple_id: string;
+  from_user_id: string;
+  to_user_id: string;
+  title: string;
+  content: string;
+  category: AppreciationCategory;
+  created_at: string;
+};
+
+function mapAppreciation(row: AppreciationRow): Appreciation {
+  return {
+    id: row.id,
+    coupleId: row.couple_id,
+    fromUserId: row.from_user_id,
+    toUserId: row.to_user_id,
+    title: row.title,
+    content: row.content,
+    category: row.category,
+    createdAt: row.created_at,
+  };
+}
+
+/** 当前用户在本对情侣里的另一半；若未绑定第二人则报错 */
+export function getPartnerUserId(couple: Couple, currentUserId: string): string {
+  if (currentUserId === couple.userA) {
+    if (!couple.userB) throw new Error("尚未绑定对方账号，无法在 Supabase couples 中补齐 user_b。");
+    return couple.userB;
+  }
+  if (couple.userB && currentUserId === couple.userB) {
+    return couple.userA;
+  }
+  throw new Error("当前账号不属于该情侣关系");
+}
+
+export async function listAppreciations(input?: {
+  category?: AppreciationCategory | "all";
+}): Promise<{ items: Appreciation[]; couple: Couple }> {
+  const couple = await getMyCouple();
+  let query = supabase
+    .from("appreciations")
+    .select(
+      "id,couple_id,from_user_id,to_user_id,title,content,category,created_at",
+    )
+    .eq("couple_id", couple.id)
+    .order("created_at", { ascending: false });
+
+  if (input?.category && input.category !== "all") {
+    query = query.eq("category", input.category);
+  }
+
+  const { data, error } = await query;
+  if (error) throw error;
+  return {
+    items: (data ?? []).map((row) => mapAppreciation(row as AppreciationRow)),
+    couple,
+  };
+}
+
+export async function createAppreciation(input: {
+  title: string;
+  content: string;
+  category: AppreciationCategory;
+}) {
+  const userId = await requireCurrentUserId();
+  const couple = await getMyCouple();
+  const toUserId = getPartnerUserId(couple, userId);
+
+  const { error } = await supabase.from("appreciations").insert({
+    couple_id: couple.id,
+    from_user_id: userId,
+    to_user_id: toUserId,
+    title: input.title.trim(),
+    content: input.content.trim(),
+    category: input.category,
+  });
   if (error) throw error;
 }
