@@ -90,10 +90,7 @@ export default function NewAppreciationPage() {
           记一条暖心瞬间
         </h1>
         <p className="text-sm text-slate-500">
-          写给 TA：{partnerLabel || "加载中…"} ·{" "}
-          <span className="text-slate-400">
-            （对方账号需在 couples 表中已配对）
-          </span>
+          写给 TA：{partnerLabel || "加载中…"}
         </p>
       </div>
 
